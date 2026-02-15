@@ -19,8 +19,8 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     
-    <!-- YouTube API Integration -->
-    <script src="https://apis.google.com/js/api.js"></script>
+    <!-- YouTube IFrame API -->
+    <script src="https://www.youtube.com/iframe_api"></script>
     
     <!-- Custom CSS -->
     <style>
@@ -44,6 +44,7 @@
             transition: background-color 0.3s ease;
             background-color: var(--dark-bg);
             color: #f8f9fa;
+            padding-bottom: 80px; /* Space for sticky player */
         }
         
         body.light-mode {
@@ -87,11 +88,19 @@
             }
         }
         
-        /* Main Layout */
+        /* Main Layout - compact spacing */
         .main-content {
-            padding-bottom: 100px;
             position: relative;
             z-index: 1;
+        }
+        
+        section {
+            padding-top: 3rem;
+            padding-bottom: 3rem;
+        }
+        
+        section:first-of-type {
+            padding-top: 6rem;
         }
         
         /* Navigation */
@@ -178,24 +187,79 @@
             color: transparent;
         }
         
-        /* Content Pillars */
+        /* Content Pillars - Modern Cards */
         .pillar-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border-radius: 15px;
+            border-radius: 20px;
             overflow: hidden;
-            border: none;
+            border: 2px solid transparent;
             height: 100%;
             backdrop-filter: blur(10px);
             background: rgba(30, 30, 30, 0.7) !important;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            z-index: 1;
         }
         
         body.light-mode .pillar-card {
             background: rgba(255, 255, 255, 0.9) !important;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .pillar-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color), var(--uganda-yellow));
+            border-radius: 20px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.4s ease;
         }
         
         .pillar-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 30px 40px rgba(0, 0, 0, 0.5);
+        }
+        
+        .pillar-card:hover::before {
+            opacity: 1;
+        }
+        
+        .pillar-card .display-4 {
+            transition: transform 0.3s ease;
+        }
+        
+        .pillar-card:hover .display-4 {
+            transform: scale(1.2);
+        }
+        
+        /* Carousel Section */
+        .carousel-section {
+            background: rgba(0,0,0,0.3);
+            padding: 3rem 0;
+        }
+        
+        .carousel {
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        
+        .carousel-item img {
+            height: 500px;
+            object-fit: cover;
+        }
+        
+        .carousel-caption {
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            border-radius: 0 0 20px 20px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            padding: 30px;
         }
         
         /* YouTube Videos */
@@ -204,6 +268,7 @@
             border-radius: 15px;
             overflow: hidden;
             background: rgba(30, 30, 30, 0.7);
+            height: 100%;
         }
         
         .youtube-video-card:hover {
@@ -215,6 +280,19 @@
             position: relative;
             overflow: hidden;
             border-radius: 15px 15px 0 0;
+            height: 200px;
+            cursor: pointer;
+        }
+        
+        .video-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .youtube-video-card:hover .video-thumbnail img {
+            transform: scale(1.1);
         }
         
         .video-play-btn {
@@ -225,7 +303,7 @@
             width: 60px;
             height: 60px;
             border-radius: 50%;
-            background: rgba(255, 0, 0, 0.8);
+            background: rgba(255, 0, 0, 0.9);
             color: white;
             display: flex;
             align-items: center;
@@ -233,6 +311,7 @@
             font-size: 1.5rem;
             opacity: 0;
             transition: all 0.3s ease;
+            border: 3px solid white;
         }
         
         .video-thumbnail:hover .video-play-btn {
@@ -380,7 +459,7 @@
         /* Footer */
         .footer {
             background: rgba(18, 18, 18, 0.95);
-            padding: 60px 0 20px;
+            padding: 40px 0 20px;
             border-top: 2px solid var(--primary-color);
             backdrop-filter: blur(10px);
         }
@@ -490,6 +569,10 @@
                 right: 10px;
                 bottom: 10px;
             }
+            
+            .carousel-item img {
+                height: 300px;
+            }
         }
         
         /* App Download Buttons */
@@ -554,12 +637,14 @@
         
         /* Page Transitions */
         .page-section {
+            display: none;
             opacity: 0;
             transform: translateY(20px);
             transition: all 0.5s ease;
         }
         
         .page-section.active {
+            display: block;
             opacity: 1;
             transform: translateY(0);
         }
@@ -622,6 +707,151 @@
             background: #FFC72C;
             color: #333;
         }
+        
+        /* Sticky Audio Player (New) */
+        .sticky-player {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+            transform: translateY(0);
+        }
+        
+        .sticky-player.minimized {
+            transform: translateY(calc(100% - 60px));
+        }
+        
+        .sticky-player .card {
+            background: rgba(30, 30, 30, 0.95);
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--primary-color);
+            border-radius: 15px 15px 0 0;
+        }
+        
+        .player-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+        }
+        
+        .player-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            background: var(--primary-color);
+            color: white;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .player-btn:hover {
+            transform: scale(1.1);
+            background: var(--secondary-color);
+        }
+        
+        .player-progress {
+            flex-grow: 1;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            cursor: pointer;
+            position: relative;
+            margin: 0 15px;
+        }
+        
+        .player-progress-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            border-radius: 2px;
+            width: 0%;
+        }
+        
+        .volume-slider {
+            width: 100px;
+        }
+        
+        /* Video Modal */
+        .video-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .video-modal-content {
+            width: 90%;
+            max-width: 800px;
+            position: relative;
+        }
+        
+        .video-modal iframe {
+            width: 100%;
+            height: 450px;
+            border-radius: 10px;
+        }
+        
+        .close-video {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+        
+        /* Signup/Login Section */
+        .auth-section {
+            background: rgba(30,30,30,0.5);
+            border-radius: 20px;
+            padding: 30px;
+        }
+        
+        .auth-tabs {
+            border-bottom: 2px solid var(--primary-color);
+            margin-bottom: 20px;
+        }
+        
+        .auth-tabs .nav-link {
+            color: #aaa;
+            border: none;
+            font-weight: 600;
+        }
+        
+        .auth-tabs .nav-link.active {
+            background: transparent;
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--primary-color);
+        }
+        
+        /* Compact spacing adjustments */
+        h2.section-title {
+            margin-bottom: 2rem !important;
+        }
+        
+        .container {
+            max-width: 1200px;
+        }
+        
+        .py-5 {
+            padding-top: 2.5rem !important;
+            padding-bottom: 2.5rem !important;
+        }
     </style>
 </head>
 <body class="dark-mode">
@@ -637,6 +867,14 @@
     <button class="floating-button ai-assistant-float" id="aiAssistantButton" title="AI Assistant">
         <i class="fas fa-robot"></i>
     </button>
+    
+    <!-- Video Modal for YouTube -->
+    <div class="video-modal" id="videoModal">
+        <div class="video-modal-content">
+            <span class="close-video" id="closeVideo">&times;</span>
+            <iframe id="videoPlayer" src="" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
     
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg sticky-top">
@@ -674,6 +912,9 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#contact">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#auth">Sign Up / Login</a>
                     </li>
                 </ul>
                 
@@ -779,48 +1020,129 @@
                 </div>
             </div>
             
-            <!-- Content Pillars -->
-            <div class="container py-5" data-aos="fade-up">
-                <h2 class="section-title mb-5 text-center">Our Content Pillars</h2>
+            <!-- Content Pillars - Enhanced Cards -->
+            <div class="container py-4" data-aos="fade-up">
+                <h2 class="section-title mb-4 text-center">Our Content Pillars</h2>
                 
                 <div class="row g-4">
-                    <div class="col-lg-3 col-md-6">
+                    <div class="col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="100">
                         <div class="pillar-card card h-100 text-center p-4">
                             <div class="display-4 mb-3">🎭</div>
                             <h4>Entertainment</h4>
                             <p class="card-text">Music, comedy, drama, and all things entertaining from Uganda and beyond.</p>
+                            <div class="mt-auto">
+                                <span class="badge bg-warning">Explore</span>
+                            </div>
                         </div>
                     </div>
                     
-                    <div class="col-lg-3 col-md-6">
+                    <div class="col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="200">
                         <div class="pillar-card card h-100 text-center p-4">
                             <div class="display-4 mb-3">🏛️</div>
                             <h4>Politics</h4>
                             <p class="card-text">In-depth analysis and discussions on Ugandan and African politics.</p>
+                            <div class="mt-auto">
+                                <span class="badge bg-warning">Explore</span>
+                            </div>
                         </div>
                     </div>
                     
-                    <div class="col-lg-3 col-md-6">
+                    <div class="col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="300">
                         <div class="pillar-card card h-100 text-center p-4">
                             <div class="display-4 mb-3">🔍</div>
                             <h4>Discoveries</h4>
                             <p class="card-text">Uncovering hidden talents, innovations, and stories from Uganda.</p>
+                            <div class="mt-auto">
+                                <span class="badge bg-warning">Explore</span>
+                            </div>
                         </div>
                     </div>
                     
-                    <div class="col-lg-3 col-md-6">
+                    <div class="col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="400">
                         <div class="pillar-card card h-100 text-center p-4">
                             <div class="display-4 mb-3">💻</div>
                             <h4>Tech Tips</h4>
                             <p class="card-text">Technology insights, digital skills, and innovation in the Ugandan context.</p>
+                            <div class="mt-auto">
+                                <span class="badge bg-warning">Explore</span>
+                            </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- New Sliding Images Carousel Section -->
+            <div class="carousel-section">
+                <div class="container">
+                    <h2 class="section-title text-center mb-4">Uganda Through Our Lens</h2>
+                    <div id="ugandaCarousel" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-indicators">
+                            <button type="button" data-bs-target="#ugandaCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                            <button type="button" data-bs-target="#ugandaCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                            <button type="button" data-bs-target="#ugandaCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                            <button type="button" data-bs-target="#ugandaCarousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
+                        </div>
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" class="d-block w-100" alt="Kampala City">
+                                <div class="carousel-caption d-none d-md-block">
+                                    <h5>Kampala City</h5>
+                                    <p>The vibrant heart of Uganda, full of life and energy.</p>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <img src="https://images.unsplash.com/photo-1523805009345-74488443a354?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" class="d-block w-100" alt="Jinja Nile">
+                                <div class="carousel-caption d-none d-md-block">
+                                    <h5>Jinja - Source of the Nile</h5>
+                                    <p>Adventure and beauty at the source of the world's longest river.</p>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <img src="https://images.unsplash.com/photo-1534188753412-3e26d0d618d6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" class="d-block w-100" alt="Murchison Falls">
+                                <div class="carousel-caption d-none d-md-block">
+                                    <h5>Murchison Falls</h5>
+                                    <p>Majestic waterfalls and wildlife in Uganda's largest national park.</p>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" class="d-block w-100" alt="Ugandan Wildlife">
+                                <div class="carousel-caption d-none d-md-block">
+                                    <h5>Wildlife Safari</h5>
+                                    <p>Encounter Uganda's incredible wildlife in their natural habitat.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#ugandaCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#ugandaCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Videos Section (with YouTube integration) -->
+            <div class="container py-4" data-aos="fade-up">
+                <h2 class="section-title mb-4 text-center">Latest Videos from Johnz Empire</h2>
+                <p class="text-muted text-center mb-4">Watch our latest content from YouTube</p>
+                
+                <div class="row" id="youtubeVideosContainer">
+                    <!-- Videos will be loaded dynamically -->
+                    <div class="col-12 text-center">
+                        <div class="spinner-border text-warning" role="status">
+                            <span class="visually-hidden">Loading videos...</span>
+                        </div>
+                        <p class="mt-3">Loading videos from YouTube...</p>
                     </div>
                 </div>
             </div>
         </section>
         
         <!-- Live Radio Section -->
-        <section id="live-radio" class="page-section container py-5">
+        <section id="live-radio" class="page-section container py-4">
             <h2 class="section-title mb-4">Live Radio Stream</h2>
             
             <div class="row">
@@ -902,13 +1224,13 @@
             </div>
         </section>
         
-        <!-- YouTube Videos Section -->
-        <section id="videos" class="page-section container py-5">
+        <!-- YouTube Videos Section (This will be loaded dynamically but kept as a placeholder) -->
+        <section id="videos" class="page-section container py-4">
             <h2 class="section-title mb-4">Latest Videos from Johnz Empire</h2>
             <p class="text-muted mb-4">Watch our latest content from YouTube</p>
             
-            <div class="row" id="youtubeVideosContainer">
-                <!-- YouTube videos will be loaded here by JavaScript -->
+            <div class="row" id="youtubeVideosContainer2">
+                <!-- Same as above, will be filled by JS -->
                 <div class="col-12 text-center">
                     <div class="spinner-border text-warning" role="status">
                         <span class="visually-hidden">Loading videos...</span>
@@ -919,7 +1241,7 @@
         </section>
         
         <!-- Shows & Schedule Section -->
-        <section id="shows" class="page-section container py-5">
+        <section id="shows" class="page-section container py-4">
             <h2 class="section-title mb-4">Weekly Schedule & Shows</h2>
             
             <div class="row">
@@ -1006,7 +1328,7 @@
         </section>
         
         <!-- Team Section -->
-        <section id="team" class="page-section container py-5">
+        <section id="team" class="page-section container py-4">
             <h2 class="section-title mb-5 text-center">Meet Our Team</h2>
             
             <div class="row g-4">
@@ -1114,7 +1436,7 @@
         </section>
         
         <!-- Community Section -->
-        <section id="community" class="page-section container py-5">
+        <section id="community" class="page-section container py-4">
             <h2 class="section-title mb-4">Join Our Community</h2>
             
             <div class="row">
@@ -1223,6 +1545,8 @@
                                 <i class="fas fa-music me-2"></i>Request a Song
                             </h5>
                             <form id="songRequestForm" action="https://formspree.io/f/mzdvwevp" method="POST">
+                                <input type="hidden" name="_subject" value="Song Request from UG Online Media">
+                                
                                 <div class="mb-3">
                                     <label for="songTitle" class="form-label">Song Title *</label>
                                     <input type="text" class="form-control" id="songTitle" name="songTitle" required>
@@ -1294,9 +1618,9 @@
         </section>
         
         <!-- Support Us Section -->
-        <section id="support" class="page-section container py-5">
+        <section id="support" class="page-section container py-4">
             <h2 class="section-title mb-4">Support Our Radio Station</h2>
-            <p class="lead mb-5 text-center">Your support helps us continue bringing Uganda to the world and the world to Uganda, 24/7</p>
+            <p class="lead mb-4 text-center">Your support helps us continue bringing Uganda to the world and the world to Uganda, 24/7</p>
             
             <div class="row">
                 <div class="col-lg-6 mb-4">
@@ -1388,7 +1712,7 @@
         </section>
         
         <!-- Contact Section -->
-        <section id="contact" class="page-section container py-5">
+        <section id="contact" class="page-section container py-4">
             <h2 class="section-title mb-4">Contact Us</h2>
             
             <div class="row">
@@ -1447,6 +1771,8 @@
                         <div class="card-body">
                             <h5 class="card-title text-warning">Send us a Message</h5>
                             <form id="contactForm" action="https://formspree.io/f/mzdvwevp" method="POST">
+                                <input type="hidden" name="_subject" value="Contact Form Submission from UG Online Media">
+                                
                                 <div class="mb-3">
                                     <label for="contactName" class="form-label">Name *</label>
                                     <input type="text" class="form-control" id="contactName" name="contactName" required>
@@ -1512,79 +1838,127 @@
                 </div>
             </div>
         </section>
+
+        <!-- New Auth Section (Signup/Login + Music Submission/Advertising Guide) -->
+        <section id="auth" class="page-section container py-4">
+            <h2 class="section-title mb-4">Join UG Online Media</h2>
+            <div class="row">
+                <div class="col-lg-7">
+                    <div class="auth-section">
+                        <ul class="nav nav-tabs auth-tabs" id="authTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login" type="button" role="tab">Login</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="signup-tab" data-bs-toggle="tab" data-bs-target="#signup" type="button" role="tab">Create Account</button>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="authTabContent">
+                            <div class="tab-pane fade show active" id="login" role="tabpanel">
+                                <form class="mt-4">
+                                    <div class="mb-3">
+                                        <label for="loginEmail" class="form-label">Email address</label>
+                                        <input type="email" class="form-control" id="loginEmail" placeholder="Enter email">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="loginPassword" class="form-label">Password</label>
+                                        <input type="password" class="form-control" id="loginPassword" placeholder="Password">
+                                    </div>
+                                    <div class="d-grid">
+                                        <button type="submit" class="btn btn-warning">Login</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="tab-pane fade" id="signup" role="tabpanel">
+                                <form class="mt-4">
+                                    <div class="mb-3">
+                                        <label for="signupName" class="form-label">Full Name</label>
+                                        <input type="text" class="form-control" id="signupName" placeholder="Enter your name">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="signupEmail" class="form-label">Email address</label>
+                                        <input type="email" class="form-control" id="signupEmail" placeholder="Enter email">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="signupPassword" class="form-label">Password</label>
+                                        <input type="password" class="form-control" id="signupPassword" placeholder="Password">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="signupPhone" class="form-label">Phone Number</label>
+                                        <input type="tel" class="form-control" id="signupPhone" placeholder="e.g., 0759970315">
+                                    </div>
+                                    <div class="d-grid">
+                                        <button type="submit" class="btn btn-warning">Sign Up</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="card bg-dark border-warning h-100">
+                        <div class="card-body">
+                            <h5 class="card-title text-warning">Want to Submit Your Music?</h5>
+                            <p class="card-text">We love playing fresh Ugandan talent! Send your tracks to us via:</p>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="fab fa-whatsapp text-success me-2"></i> WhatsApp: 0759970315</li>
+                                <li class="mb-2"><i class="fab fa-telegram text-info me-2"></i> Telegram: @johnzempire</li>
+                                <li class="mb-2"><i class="fas fa-envelope text-warning me-2"></i> Email: waddajohn45@gmail.com</li>
+                            </ul>
+                            <hr>
+                            <h5 class="card-title text-warning">Advertise With Us</h5>
+                            <p>Reach our growing audience of over 10,000 listeners. Contact us for rates and packages via our social channels or call 0759970315.</p>
+                            <div class="d-flex gap-2 mt-3">
+                                <a href="https://www.facebook.com/wadda.john.3/" class="btn btn-primary btn-sm" target="_blank"><i class="fab fa-facebook"></i> Facebook</a>
+                                <a href="https://t.me/johnzempire" class="btn btn-info btn-sm" target="_blank"><i class="fab fa-telegram"></i> Telegram</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 
-    <!-- Sticky Audio Player -->
-    <div class="sticky-player fixed-bottom">
+    <!-- Sticky Audio Player (with minimize/maximize and OpenDrive source) -->
+    <div class="sticky-player" id="stickyPlayer">
         <div class="container">
-            <div class="card shadow-lg border-warning">
+            <div class="card">
                 <div class="card-body py-2">
-                    <div class="row align-items-center">
-                        <!-- Album Art & Track Info -->
-                        <div class="col-lg-3 col-md-4 mb-2 mb-md-0">
-                            <div class="d-flex align-items-center">
-                                <div class="me-3">
-                                    <img src="https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg" 
-                                         alt="Now Playing" class="rounded" width="50" height="50" id="playerAlbumArt">
-                                </div>
-                                <div class="player-track-info">
-                                    <div class="fw-bold text-truncate" id="playerTrackTitle">Loading trending music...</div>
-                                    <div class="text-muted small text-truncate" id="playerTrackArtist">Hot Ugandan Hits</div>
-                                </div>
+                    <div class="player-controls">
+                        <div class="d-flex align-items-center">
+                            <button class="player-btn me-2" id="minimizePlayer">
+                                <i class="fas fa-window-minimize"></i>
+                            </button>
+                            <button class="player-btn me-2" id="maximizePlayer" style="display: none;">
+                                <i class="fas fa-window-maximize"></i>
+                            </button>
+                            <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-4.0.3&auto=format&fit=crop&w=50&q=80" 
+                                 alt="Now Playing" class="rounded me-3" width="40" height="40">
+                            <div>
+                                <div class="fw-bold" id="playerTrackTitle2">UG Online Mix</div>
+                                <small class="text-muted" id="playerTrackArtist2">Hot Ugandan Hits</small>
                             </div>
                         </div>
                         
-                        <!-- Player Controls -->
-                        <div class="col-lg-6 col-md-4 mb-2 mb-md-0">
-                            <div class="d-flex flex-column align-items-center">
-                                <div class="d-flex align-items-center mb-1">
-                                    <button class="btn btn-outline-warning btn-sm me-3" id="shuffleBtn" title="Shuffle">
-                                        <i class="fas fa-random"></i>
-                                    </button>
-                                    
-                                    <button class="btn btn-warning me-3" id="prevBtn" title="Previous">
-                                        <i class="fas fa-step-backward"></i>
-                                    </button>
-                                    
-                                    <button class="btn btn-warning me-3" id="playBtn" title="Play">
-                                        <i class="fas fa-play"></i>
-                                    </button>
-                                    
-                                    <button class="btn btn-warning me-3" id="nextBtn" title="Next">
-                                        <i class="fas fa-step-forward"></i>
-                                    </button>
-                                    
-                                    <button class="btn btn-outline-warning btn-sm" id="repeatBtn" title="Repeat">
-                                        <i class="fas fa-redo"></i>
-                                    </button>
-                                </div>
-                                
-                                <div class="w-100">
-                                    <div class="d-flex align-items-center">
-                                        <small class="me-2" id="playerElapsed">0:00</small>
-                                        <div class="progress flex-grow-1 me-2">
-                                            <div class="progress-bar" id="playerProgressBar" style="width: 0%"></div>
-                                        </div>
-                                        <small class="ms-2" id="playerDuration">0:00</small>
-                                    </div>
-                                </div>
+                        <div class="d-flex align-items-center flex-grow-1 mx-4">
+                            <button class="player-btn me-2" id="playerPlayBtn2">
+                                <i class="fas fa-play"></i>
+                            </button>
+                            <button class="player-btn me-2" id="playerPauseBtn2" style="display: none;">
+                                <i class="fas fa-pause"></i>
+                            </button>
+                            <div class="player-progress me-3" id="playerProgress2">
+                                <div class="player-progress-bar" id="playerProgressBar2"></div>
                             </div>
+                            <span class="text-muted small" id="playerTime2">0:00 / 3:45</span>
                         </div>
                         
-                        <!-- Volume & Extra Controls -->
-                        <div class="col-lg-3 col-md-4">
-                            <div class="d-flex justify-content-end align-items-center">
-                                <button class="btn btn-outline-warning btn-sm me-2" id="muteBtn" title="Mute">
-                                    <i class="fas fa-volume-up"></i>
-                                </button>
-                                
-                                <div class="volume-slider me-3" style="width: 80px;">
-                                    <input type="range" class="form-range" min="0" max="100" value="80" id="volumeSlider">
-                                </div>
-                                
-                                <button class="btn btn-warning btn-sm" id="liveBtn" title="Go Live">
-                                    <i class="fas fa-broadcast-tower"></i>
-                                </button>
+                        <div class="d-flex align-items-center">
+                            <button class="player-btn me-2" id="muteBtn2">
+                                <i class="fas fa-volume-up"></i>
+                            </button>
+                            <div class="volume-slider">
+                                <input type="range" class="form-range" min="0" max="100" value="80" id="volumeSlider2">
                             </div>
                         </div>
                     </div>
@@ -1730,7 +2104,10 @@
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
-    <!-- YouTube API Configuration -->
+    <!-- YouTube IFrame API -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+    
+    <!-- ==================== ORIGINAL JAVASCRIPT (PRESERVED) ==================== -->
     <script>
         // YouTube API Configuration
         const YOUTUBE_CONFIG = {
@@ -1781,7 +2158,7 @@
         };
     </script>
     
-    <!-- Main Application JavaScript -->
+    <!-- Main Application JavaScript (Original) -->
     <script>
         // MAIN.JS - Core application logic
         document.addEventListener('DOMContentLoaded', function() {
@@ -2169,9 +2546,7 @@
         // YouTube Videos Integration
         function loadYouTubeVideos() {
             const container = document.getElementById('youtubeVideosContainer');
-            
-            // In a real implementation, you would use the YouTube Data API
-            // For now, we'll use a mock implementation
+            if (!container) return;
             
             // Mock YouTube videos data
             const mockVideos = [
@@ -2231,10 +2606,10 @@
             // Display videos
             mockVideos.forEach(video => {
                 const col = document.createElement('div');
-                col.className = 'col-lg-4 col-md-6 mb-4';
+                col.className = 'col-lg-4 col-md-6 mb-4 youtube-video-card';
                 col.innerHTML = `
-                    <div class="youtube-video-card card h-100">
-                        <div class="video-thumbnail">
+                    <div class="card h-100">
+                        <div class="video-thumbnail" data-video-id="${video.videoId}">
                             <img src="${video.thumbnail}" class="card-img-top" alt="${video.title}" style="height: 200px; object-fit: cover;">
                             <div class="video-play-btn">
                                 <i class="fas fa-play"></i>
@@ -2275,9 +2650,6 @@
             if (songRequestForm) {
                 songRequestForm.addEventListener('submit', function(e) {
                     // Form will submit to Formspree
-                    // You can add custom validation or confirmation here
-                    
-                    // Show confirmation message
                     setTimeout(() => {
                         alert('Thank you for your song request! We\'ll do our best to play it soon.');
                         this.reset();
@@ -2289,9 +2661,6 @@
             const contactForm = document.getElementById('contactForm');
             if (contactForm) {
                 contactForm.addEventListener('submit', function(e) {
-                    // Form will submit to Formspree
-                    
-                    // Show confirmation message
                     setTimeout(() => {
                         alert('Thank you for your message! We\'ll get back to you soon.');
                         this.reset();
@@ -2303,9 +2672,6 @@
             const newsletterForm = document.getElementById('newsletterForm');
             if (newsletterForm) {
                 newsletterForm.addEventListener('submit', function(e) {
-                    // Form will submit to Formspree
-                    
-                    // Show confirmation message
                     setTimeout(() => {
                         alert('Thank you for subscribing to our newsletter!');
                         this.reset();
@@ -2461,8 +2827,6 @@
                 btn.addEventListener('click', function() {
                     const question = this.getAttribute('data-question');
                     aiMessage.value = question;
-                    
-                    // Auto-focus on message input
                     aiMessage.focus();
                 });
             });
@@ -2472,33 +2836,18 @@
                 const message = aiMessage.value.trim();
                 
                 if (message) {
-                    // In a real implementation, this would send to a backend AI service
-                    // For now, we'll simulate a response
-                    
-                    // Create Formspree submission
-                    const formData = new FormData();
-                    formData.append('_subject', 'AI Assistant Question');
-                    formData.append('message', message);
-                    formData.append('timestamp', new Date().toISOString());
-                    
-                    // Show sending message
+                    // Simulate API call
                     const originalText = sendAIMessage.innerHTML;
                     sendAIMessage.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Sending...';
                     sendAIMessage.disabled = true;
                     
-                    // Simulate API call
                     setTimeout(() => {
-                        // Reset button
                         sendAIMessage.innerHTML = originalText;
                         sendAIMessage.disabled = false;
                         
-                        // Show success message
                         alert('Your question has been sent to our team! We\'ll respond as soon as possible.');
-                        
-                        // Clear input
                         aiMessage.value = '';
                         
-                        // Close modal
                         gsap.to(aiModal, {
                             opacity: 0,
                             duration: 0.3,
@@ -2583,13 +2932,223 @@
             // Simulate live listener updates
             setInterval(() => {
                 const currentCount = parseInt(counterElement.textContent);
-                const change = Math.floor(Math.random() * 5) - 2; // -2 to +2 change
+                const change = Math.floor(Math.random() * 5) - 2;
                 const newCount = Math.max(15, Math.min(35, currentCount + change));
                 
                 counterElement.textContent = newCount;
                 document.getElementById('liveListenerCount').textContent = newCount;
-            }, 30000); // Update every 30 seconds
+            }, 30000);
         }
+    </script>
+    
+    <!-- ==================== NEW ENHANCEMENTS ==================== -->
+    <script>
+        // Configuration for new features
+        const NEW_CONFIG = {
+            AUDIO_SRC: 'https://od.lk/s/OTlfNzY0NDQwMjlf/Dj%5B1%5D.m4a'  // OpenDrive source
+        };
+
+        // Video modal functionality
+        const videoModal = document.getElementById('videoModal');
+        const videoPlayer = document.getElementById('videoPlayer');
+        const closeVideo = document.getElementById('closeVideo');
+
+        // Add click listeners to video thumbnails (for both containers)
+        document.addEventListener('click', function(e) {
+            const target = e.target.closest('.video-thumbnail');
+            if (target) {
+                const videoId = target.dataset.videoId;
+                if (videoId) {
+                    videoPlayer.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+                    videoModal.style.display = 'flex';
+                }
+            }
+        });
+
+        closeVideo.addEventListener('click', () => {
+            videoModal.style.display = 'none';
+            videoPlayer.src = '';
+        });
+
+        videoModal.addEventListener('click', (e) => {
+            if (e.target === videoModal) {
+                videoModal.style.display = 'none';
+                videoPlayer.src = '';
+            }
+        });
+
+        // New sticky player with OpenDrive audio source
+        let audio = new Audio(NEW_CONFIG.AUDIO_SRC);
+        let isPlaying = false;
+        let audioDuration = 225; // placeholder, will be set when metadata loaded
+
+        audio.addEventListener('loadedmetadata', () => {
+            audioDuration = audio.duration;
+            document.getElementById('playerTime2').textContent = '0:00 / ' + formatTime(audioDuration);
+        });
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        // New player controls
+        const playBtn2 = document.getElementById('playerPlayBtn2');
+        const pauseBtn2 = document.getElementById('playerPauseBtn2');
+        const progressBar2 = document.getElementById('playerProgressBar2');
+        const progressContainer2 = document.getElementById('playerProgress2');
+        const timeDisplay2 = document.getElementById('playerTime2');
+        const volumeSlider2 = document.getElementById('volumeSlider2');
+        const muteBtn2 = document.getElementById('muteBtn2');
+
+        playBtn2.addEventListener('click', () => {
+            audio.play();
+            playBtn2.style.display = 'none';
+            pauseBtn2.style.display = 'inline-flex';
+            isPlaying = true;
+        });
+
+        pauseBtn2.addEventListener('click', () => {
+            audio.pause();
+            pauseBtn2.style.display = 'none';
+            playBtn2.style.display = 'inline-flex';
+            isPlaying = false;
+        });
+
+        audio.addEventListener('timeupdate', () => {
+            const progress = (audio.currentTime / audioDuration) * 100;
+            progressBar2.style.width = progress + '%';
+            timeDisplay2.textContent = formatTime(audio.currentTime) + ' / ' + formatTime(audioDuration);
+        });
+
+        progressContainer2.addEventListener('click', (e) => {
+            const rect = progressContainer2.getBoundingClientRect();
+            const percent = (e.clientX - rect.left) / rect.width;
+            audio.currentTime = percent * audioDuration;
+        });
+
+        volumeSlider2.addEventListener('input', (e) => {
+            audio.volume = e.target.value / 100;
+            muteBtn2.innerHTML = audio.volume === 0 ? '<i class="fas fa-volume-mute"></i>' : 
+                               (audio.volume < 0.5 ? '<i class="fas fa-volume-down"></i>' : '<i class="fas fa-volume-up"></i>');
+        });
+
+        muteBtn2.addEventListener('click', () => {
+            if (audio.volume > 0) {
+                audio.volume = 0;
+                volumeSlider2.value = 0;
+                muteBtn2.innerHTML = '<i class="fas fa-volume-mute"></i>';
+            } else {
+                audio.volume = 0.8;
+                volumeSlider2.value = 80;
+                muteBtn2.innerHTML = '<i class="fas fa-volume-up"></i>';
+            }
+        });
+
+        // Minimize/Maximize player
+        const minimizeBtn = document.getElementById('minimizePlayer');
+        const maximizeBtn = document.getElementById('maximizePlayer');
+        const stickyPlayer = document.getElementById('stickyPlayer');
+
+        minimizeBtn.addEventListener('click', () => {
+            stickyPlayer.classList.add('minimized');
+            minimizeBtn.style.display = 'none';
+            maximizeBtn.style.display = 'inline-flex';
+        });
+
+        maximizeBtn.addEventListener('click', () => {
+            stickyPlayer.classList.remove('minimized');
+            maximizeBtn.style.display = 'none';
+            minimizeBtn.style.display = 'inline-flex';
+        });
+
+        // Also load videos into the second container
+        setTimeout(() => {
+            const container2 = document.getElementById('youtubeVideosContainer2');
+            if (container2 && typeof loadYouTubeVideos === 'function') {
+                // Reuse the original function but target the second container
+                const mockVideos = [
+                    {
+                        id: 'video1',
+                        title: 'Morning Show Highlights - December 2023',
+                        description: 'Best moments from our morning show this month',
+                        thumbnail: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+                        publishedAt: '2023-12-15',
+                        videoId: 'dQw4w9WgXcQ'
+                    },
+                    {
+                        id: 'video2',
+                        title: 'Ugandan Music Mix 2023',
+                        description: 'Top Ugandan songs of the year',
+                        thumbnail: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+                        publishedAt: '2023-12-10',
+                        videoId: '9bZkp7q19f0'
+                    },
+                    {
+                        id: 'video3',
+                        title: 'Tech Talk Tuesday - Mobile Apps',
+                        description: 'Discussion about mobile app development in Uganda',
+                        thumbnail: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+                        publishedAt: '2023-12-05',
+                        videoId: 'CevxZvSJLk8'
+                    },
+                    {
+                        id: 'video4',
+                        title: 'Community Meetup Highlights',
+                        description: 'Highlights from our last community gathering',
+                        thumbnail: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+                        publishedAt: '2023-11-28',
+                        videoId: 'JGwWNGJdvx8'
+                    },
+                    {
+                        id: 'video5',
+                        title: 'Interview with Local Artist',
+                        description: 'Exclusive interview with rising Ugandan artist',
+                        thumbnail: 'https://images.unsplash.com/photo-1492684223066-dd23140edf6d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+                        publishedAt: '2023-11-20',
+                        videoId: 'dQw4w9WgXcQ'
+                    },
+                    {
+                        id: 'video6',
+                        title: 'News Analysis - Current Affairs',
+                        description: 'In-depth analysis of current Ugandan news',
+                        thumbnail: 'https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+                        publishedAt: '2023-11-15',
+                        videoId: '9bZkp7q19f0'
+                    }
+                ];
+                
+                container2.innerHTML = '';
+                mockVideos.forEach(video => {
+                    const col = document.createElement('div');
+                    col.className = 'col-lg-4 col-md-6 mb-4 youtube-video-card';
+                    col.innerHTML = `
+                        <div class="card h-100">
+                            <div class="video-thumbnail" data-video-id="${video.videoId}">
+                                <img src="${video.thumbnail}" class="card-img-top" alt="${video.title}" style="height: 200px; object-fit: cover;">
+                                <div class="video-play-btn">
+                                    <i class="fas fa-play"></i>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">${video.title}</h5>
+                                <p class="card-text">${video.description}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <small class="text-muted">
+                                        <i class="far fa-calendar me-1"></i>${new Date(video.publishedAt).toLocaleDateString()}
+                                    </small>
+                                    <a href="https://www.youtube.com/watch?v=${video.videoId}" class="btn btn-sm btn-danger" target="_blank">
+                                        <i class="fab fa-youtube me-1"></i> Watch
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    container2.appendChild(col);
+                });
+            }
+        }, 500);
     </script>
 </body>
 </html>
