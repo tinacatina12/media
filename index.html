@@ -82,7 +82,6 @@
                 transition-duration: 0.01ms !important;
                 scroll-behavior: auto !important;
             }
-            
             .animated-bg {
                 animation: none;
             }
@@ -128,7 +127,12 @@
         .nav-link {
             font-weight: 500;
             position: relative;
-            transition: color 0.3s ease;
+            transition: color 0.3s ease, transform 0.2s ease;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary-color);
+            transform: translateY(-2px);
         }
         
         .nav-link::after {
@@ -139,13 +143,14 @@
             width: 0;
             height: 2px;
             background: var(--primary-color);
-            transition: all 0.3s ease;
+            transition: width 0.3s ease, left 0.3s ease;
             transform: translateX(-50%);
         }
         
         .nav-link:hover::after,
         .nav-link.active::after {
             width: 100%;
+            left: 50%;
         }
         
         /* Hero Section */
@@ -236,7 +241,7 @@
             transform: scale(1.2);
         }
         
-        /* Carousel Section */
+        /* Carousel Sections */
         .carousel-section {
             background: rgba(0,0,0,0.3);
             padding: 3rem 0;
@@ -708,7 +713,7 @@
             color: #333;
         }
         
-        /* Sticky Audio Player (New) */
+        /* Sticky Audio Player - Responsive */
         .sticky-player {
             position: fixed;
             bottom: 0;
@@ -734,12 +739,51 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
             padding: 10px;
         }
         
-        .player-btn {
+        .player-track {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 180px;
+        }
+        
+        .player-track img {
             width: 40px;
             height: 40px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+        
+        .player-control-buttons {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .player-progress-area {
+            flex: 2;
+            min-width: 150px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .player-volume {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 120px;
+        }
+        
+        .player-btn {
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -763,7 +807,6 @@
             border-radius: 2px;
             cursor: pointer;
             position: relative;
-            margin: 0 15px;
         }
         
         .player-progress-bar {
@@ -777,7 +820,29 @@
         }
         
         .volume-slider {
-            width: 100px;
+            width: 80px;
+        }
+        
+        @media (max-width: 768px) {
+            .player-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .player-track, .player-control-buttons, .player-progress-area, .player-volume {
+                justify-content: center;
+            }
+            .player-progress-area {
+                order: 3;
+            }
+            .player-volume {
+                order: 4;
+            }
+            .player-control-buttons {
+                order: 2;
+            }
+            .player-track {
+                order: 1;
+            }
         }
         
         /* Video Modal */
@@ -851,6 +916,14 @@
         .py-5 {
             padding-top: 2.5rem !important;
             padding-bottom: 2.5rem !important;
+        }
+        
+        /* Radio Flyer Image */
+        .radio-flyer {
+            max-width: 100%;
+            border-radius: 20px;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
     </style>
 </head>
@@ -942,6 +1015,9 @@
                     <div class="row align-items-center">
                         <div class="col-lg-6">
                             <div class="hero-badge">Live from Kampala, Uganda</div>
+                            <!-- Radio Flyer Image -->
+                            <img src="https://lh3.googleusercontent.com/p/AF1QipPXX9KCAQamOaECGLUwDpALQDkA80NOwGBjox2d=s1360-w1360-h1020-rw" 
+                                 alt="Radio Flyer" class="radio-flyer img-fluid">
                             <h1 class="display-4 fw-bold mb-3">Bringing Uganda to the World & the World to Uganda</h1>
                             <p class="lead mb-4">UG Online Media (UGONLINEMEDIA) is your digital hub for Ugandan entertainment, news, and radio. Streaming 24/7 to over 10,000 listeners worldwide.</p>
                             
@@ -1015,6 +1091,49 @@
                                     </div>
                                 </div>
                             </div>
+                            
+                            <!-- New Sliding Images about the Radio Station -->
+                            <div class="mt-4">
+                                <div class="card bg-dark border-warning">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-warning">
+                                            <i class="fas fa-images me-2"></i>Radio Station Moments
+                                        </h5>
+                                        <div id="stationCarousel" class="carousel slide" data-bs-ride="carousel">
+                                            <div class="carousel-inner">
+                                                <div class="carousel-item active">
+                                                    <img src="https://lh3.googleusercontent.com/p/AF1QipPXX9KCAQamOaECGLUwDpALQDkA80NOwGBjox2d=s1360-w1360-h1020-rw" 
+                                                         class="d-block w-100 rounded" alt="Studio">
+                                                    <div class="carousel-caption d-none d-md-block">
+                                                        <p>Our vibrant studio in Kampala</p>
+                                                    </div>
+                                                </div>
+                                                <div class="carousel-item">
+                                                    <img src="https://lh3.googleusercontent.com/p/AF1QipMauOQYysSeJCwYecoCScx-rkPcgC37NmJM1dO3=w151-h108-n-k-no-nu"d-block w-100 rounded" alt="DJ at work">
+                                                    <div class="carousel-caption d-none d-md-block">
+                                                        <p>DJ Mark live on air</p>
+                                                    </div>
+                                                </div>
+                                                <div class="carousel-item">
+                                                    <img src="https://lh3.googleusercontent.com/p/AF1QipMhWs6Woj0RV1jQfGZuOWsupeQyWOGNYbom8f8b=w243-h406-n-k-no-nu" 
+                                                         class="d-block w-100 rounded" alt="Audience">
+                                                    <div class="carousel-caption d-none d-md-block">
+                                                        <p>Connecting with our listeners</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button class="carousel-control-prev" type="button" data-bs-target="#stationCarousel" data-bs-slide="prev">
+                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Previous</span>
+                                            </button>
+                                            <button class="carousel-control-next" type="button" data-bs-target="#stationCarousel" data-bs-slide="next">
+                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Next</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1071,7 +1190,7 @@
                 </div>
             </div>
 
-            <!-- New Sliding Images Carousel Section -->
+            <!-- Uganda Through Our Lens Carousel -->
             <div class="carousel-section">
                 <div class="container">
                     <h2 class="section-title text-center mb-4">Uganda Through Our Lens</h2>
@@ -1084,34 +1203,133 @@
                         </div>
                         <div class="carousel-inner">
                             <div class="carousel-item active">
-                                <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" class="d-block w-100" alt="Kampala City">
+                                <img src="https://lh3.googleusercontent.com/yCfeRgWAJ9oHX5ZCNVbLyaIQlq3XFpaUzNk3WaqJ9--TI59a5oeLR3r34vcOdJMZhj-sWMOILuNVQ3ht=s360-w360-h360" class="d-block w-100" alt="Kampala City">
                                 <div class="carousel-caption d-none d-md-block">
                                     <h5>Kampala City</h5>
                                     <p>The vibrant heart of Uganda, full of life and energy.</p>
                                 </div>
                             </div>
                             <div class="carousel-item">
-                                <img src="https://images.unsplash.com/photo-1523805009345-74488443a354?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" class="d-block w-100" alt="Jinja Nile">
+                                <img src="https://lh3.googleusercontent.com/p/AF1QipOo3ynzcoEQchKykULVL2oLcObQyhC2gXrBqWF7=w243-h174-n-k-no-nu">
                                 <div class="carousel-caption d-none d-md-block">
                                     <h5>Jinja - Source of the Nile</h5>
                                     <p>Adventure and beauty at the source of the world's longest river.</p>
                                 </div>
                             </div>
                             <div class="carousel-item">
-                                <img src="https://images.unsplash.com/photo-1534188753412-3e26d0d618d6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" class="d-block w-100" alt="Murchison Falls">
+                                <img src="https://lh3.googleusercontent.com/p/AF1QipMauOQYysSeJCwYecoCScx-rkPcgC37NmJM1dO3=w243-h174-n-k-no-nu">
                                 <div class="carousel-caption d-none d-md-block">
                                     <h5>Murchison Falls</h5>
                                     <p>Majestic waterfalls and wildlife in Uganda's largest national park.</p>
                                 </div>
                             </div>
                             <div class="carousel-item">
-                                <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" class="d-block w-100" alt="Ugandan Wildlife">
+                                <img src="https://lh3.googleusercontent.com/p/AF1QipOEHloQBywnAfQIpwDv6nvCqSb3yrxw9plsZEfh=w243-h174-n-k-no-nu">
                                 <div class="carousel-caption d-none d-md-block">
                                     <h5>Wildlife Safari</h5>
                                     <p>Encounter Uganda's incredible wildlife in their natural habitat.</p>
                                 </div>
                             </div>
                         </div>
+
+
+
+
+                         <div class="carousel-item">
+                                <img src="https://lh3.googleusercontent.com/p/AF1QipPjxoUcUtNIGzWHhA1jj4QMyjpAFbDQ6Q4nEsbc=w243-h174-n-k-no-nu">
+                                <div class="carousel-caption d-none d-md-block">
+                                    <h5>Wildlife Safari</h5>
+                                    <p>Encounter Uganda's incredible wildlife in their natural habitat.</p>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+                       
+
+
+
+
+
+                         <div class="carousel-item">
+                                <img src=" https://lh3.googleusercontent.com/p/AF1QipOo3ynzcoEQchKykULVL2oLcObQyhC2gXrBqWF7=w151-h108-n-k-no-nu
+">
+                                <div class="carousel-caption d-none d-md-block">
+                                    <h5>Wildlife Safari</h5>
+                                    <p>Encounter Uganda's incredible wildlife in their natural habitat.</p>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+                         <div class="carousel-item">
+                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3LVgsDT78GA6CeiFu-vNB_7DZs4j-domMgg&s">
+                                <div class="carousel-caption d-none d-md-block">
+                                    <h5>Wildlife Safari</h5>
+                                    <p>Encounter Uganda's incredible wildlife in their natural habitat.</p>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
+
+                         <div class="carousel-item">
+                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQBTe62lUgJMnyX9iEs397xb4HvlnOHIGYR0Q&s">
+                                <div class="carousel-caption d-none d-md-block">
+                                    <h5>Wildlife Safari</h5>
+                                    <p>Encounter Uganda's incredible wildlife in their natural habitat.</p>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+
+
+                         <div class="carousel-item">
+                                <img src="https://cdn.onlineradiobox.com/img/fblogo/7/132617.v1.png">
+                                <div class="carousel-caption d-none d-md-block">
+                                    <h5>Wildlife Safari</h5>
+                                    <p>Encounter Uganda's incredible wildlife in their natural habitat.</p>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                         <button class="carousel-control-prev" type="button" data-bs-target="#ugandaCarousel" data-bs-slide="prev">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Previous</span>
@@ -1124,23 +1342,7 @@
                 </div>
             </div>
 
-            <!-- Videos Section (with YouTube integration) -->
-            <div class="container py-4" data-aos="fade-up">
-                <h2 class="section-title mb-4 text-center">Latest Videos from Johnz Empire</h2>
-                <p class="text-muted text-center mb-4">Watch our latest content from YouTube</p>
-                
-                <div class="row" id="youtubeVideosContainer">
-                    <!-- Videos will be loaded dynamically -->
-                    <div class="col-12 text-center">
-                        <div class="spinner-border text-warning" role="status">
-                            <span class="visually-hidden">Loading videos...</span>
-                        </div>
-                        <p class="mt-3">Loading videos from YouTube...</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
+            
         <!-- Live Radio Section -->
         <section id="live-radio" class="page-section container py-4">
             <h2 class="section-title mb-4">Live Radio Stream</h2>
@@ -1230,7 +1432,6 @@
             <p class="text-muted mb-4">Watch our latest content from YouTube</p>
             
             <div class="row" id="youtubeVideosContainer2">
-                <!-- Same as above, will be filled by JS -->
                 <div class="col-12 text-center">
                     <div class="spinner-border text-warning" role="status">
                         <span class="visually-hidden">Loading videos...</span>
@@ -1919,42 +2120,45 @@
         </section>
     </div>
 
-    <!-- Sticky Audio Player (with minimize/maximize and OpenDrive source) -->
+    <!-- Sticky Audio Player (Responsive with minimize/maximize) -->
     <div class="sticky-player" id="stickyPlayer">
         <div class="container">
             <div class="card">
                 <div class="card-body py-2">
                     <div class="player-controls">
-                        <div class="d-flex align-items-center">
-                            <button class="player-btn me-2" id="minimizePlayer">
+                        <div class="player-track">
+                            <button class="player-btn" id="minimizePlayer">
                                 <i class="fas fa-window-minimize"></i>
                             </button>
-                            <button class="player-btn me-2" id="maximizePlayer" style="display: none;">
+                            <button class="player-btn" id="maximizePlayer" style="display: none;">
                                 <i class="fas fa-window-maximize"></i>
                             </button>
                             <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-4.0.3&auto=format&fit=crop&w=50&q=80" 
-                                 alt="Now Playing" class="rounded me-3" width="40" height="40">
+                                 alt="Now Playing" class="rounded">
                             <div>
                                 <div class="fw-bold" id="playerTrackTitle2">UG Online Mix</div>
                                 <small class="text-muted" id="playerTrackArtist2">Hot Ugandan Hits</small>
                             </div>
                         </div>
                         
-                        <div class="d-flex align-items-center flex-grow-1 mx-4">
-                            <button class="player-btn me-2" id="playerPlayBtn2">
+                        <div class="player-control-buttons">
+                            <button class="player-btn" id="playerPlayBtn2">
                                 <i class="fas fa-play"></i>
                             </button>
-                            <button class="player-btn me-2" id="playerPauseBtn2" style="display: none;">
+                            <button class="player-btn" id="playerPauseBtn2" style="display: none;">
                                 <i class="fas fa-pause"></i>
                             </button>
-                            <div class="player-progress me-3" id="playerProgress2">
+                        </div>
+                        
+                        <div class="player-progress-area">
+                            <div class="player-progress" id="playerProgress2">
                                 <div class="player-progress-bar" id="playerProgressBar2"></div>
                             </div>
                             <span class="text-muted small" id="playerTime2">0:00 / 3:45</span>
                         </div>
                         
-                        <div class="d-flex align-items-center">
-                            <button class="player-btn me-2" id="muteBtn2">
+                        <div class="player-volume">
+                            <button class="player-btn" id="muteBtn2">
                                 <i class="fas fa-volume-up"></i>
                             </button>
                             <div class="volume-slider">
@@ -2244,6 +2448,13 @@
                     // Show the corresponding section
                     const targetId = this.getAttribute('href').substring(1);
                     showSection(targetId);
+                    
+                    // Close mobile menu if open (Bootstrap handles this, but we add for good measure)
+                    const navbarToggler = document.querySelector('.navbar-toggler');
+                    const navbarCollapse = document.querySelector('.navbar-collapse');
+                    if (navbarCollapse.classList.contains('show')) {
+                        navbarToggler.click();
+                    }
                 });
             });
             
@@ -2261,8 +2472,8 @@
                 document.querySelector('a[href="#live-radio"]').classList.add('active');
             });
             
-            // Live button in player
-            document.getElementById('liveBtn').addEventListener('click', function() {
+            // Live button in player (old player, we'll keep for compatibility)
+            document.getElementById('liveBtn')?.addEventListener('click', function() {
                 showSection('live-radio');
                 document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
                 document.querySelector('a[href="#live-radio"]').classList.add('active');
@@ -2297,7 +2508,7 @@
             }
         }
         
-        // Player Controls with YouTube Integration
+        // Player Controls with YouTube Integration (original)
         function initPlayer() {
             const playBtn = document.getElementById('playBtn');
             const prevBtn = document.getElementById('prevBtn');
@@ -2313,26 +2524,26 @@
             const playerTrackArtist = document.getElementById('playerTrackArtist');
             const playerAlbumArt = document.getElementById('playerAlbumArt');
             
+            if (!playBtn) return; // if old player not present, exit
+            
             let currentTrackIndex = 0;
             let isPlaying = false;
             let isShuffled = false;
             let repeatMode = 'off';
             let currentTime = 0;
-            let totalTime = 225; // 3:45 in seconds
+            let totalTime = 225;
             let playbackInterval;
             
             // Load saved volume
             const savedVolume = localStorage.getItem('radioVolume') || 80;
             volumeSlider.value = savedVolume;
             
-            // Format time in MM:SS
             function formatTime(seconds) {
                 const mins = Math.floor(seconds / 60);
                 const secs = Math.floor(seconds % 60);
                 return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
             }
             
-            // Update track info
             function updateTrackInfo() {
                 const track = TRENDING_UGANDAN_SONGS[currentTrackIndex];
                 playerTrackTitle.textContent = track.title;
@@ -2340,7 +2551,6 @@
                 playerDuration.textContent = track.duration;
                 playerAlbumArt.src = track.thumbnail;
                 
-                // Parse duration
                 const timeParts = track.duration.split(':');
                 totalTime = parseInt(timeParts[0]) * 60 + parseInt(timeParts[1]);
                 currentTime = 0;
@@ -2348,7 +2558,6 @@
                 playerElapsed.textContent = '0:00';
             }
             
-            // Simulate playback progress
             function simulatePlayback() {
                 if (!isPlaying) return;
                 
@@ -2366,31 +2575,19 @@
                 playerProgressBar.style.width = `${progressPercent}%`;
                 playerElapsed.textContent = formatTime(currentTime);
                 
-                // Update hero progress
                 document.getElementById('nowPlayingProgress').style.width = `${progressPercent}%`;
                 document.getElementById('nowPlayingElapsed').textContent = formatTime(currentTime);
             }
             
-            // Play/pause functionality
             playBtn.addEventListener('click', function() {
                 isPlaying = !isPlaying;
                 
                 if (isPlaying) {
                     playBtn.innerHTML = '<i class="fas fa-pause"></i>';
                     playBtn.title = "Pause";
-                    
-                    // Start playback simulation
                     playbackInterval = setInterval(simulatePlayback, 1000);
+                    gsap.to(playBtn, { scale: 1.1, duration: 0.2, yoyo: true, repeat: 1 });
                     
-                    // Animate play button
-                    gsap.to(playBtn, {
-                        scale: 1.1,
-                        duration: 0.2,
-                        yoyo: true,
-                        repeat: 1
-                    });
-                    
-                    // Update now playing info
                     const track = TRENDING_UGANDAN_SONGS[currentTrackIndex];
                     document.getElementById('nowPlayingTitle').textContent = track.title;
                     document.getElementById('nowPlayingArtist').textContent = track.artist;
@@ -2398,13 +2595,10 @@
                 } else {
                     playBtn.innerHTML = '<i class="fas fa-play"></i>';
                     playBtn.title = "Play";
-                    
-                    // Stop playback simulation
                     clearInterval(playbackInterval);
                 }
             });
             
-            // Previous track
             prevBtn.addEventListener('click', function() {
                 currentTrackIndex = currentTrackIndex > 0 ? currentTrackIndex - 1 : TRENDING_UGANDAN_SONGS.length - 1;
                 updateTrackInfo();
@@ -2412,25 +2606,12 @@
                     clearInterval(playbackInterval);
                     playbackInterval = setInterval(simulatePlayback, 1000);
                 }
-                
-                // Animate button
-                gsap.to(prevBtn, {
-                    scale: 1.2,
-                    duration: 0.2,
-                    yoyo: true
-                });
+                gsap.to(prevBtn, { scale: 1.2, duration: 0.2, yoyo: true });
             });
             
-            // Next track
             nextBtn.addEventListener('click', function() {
                 playNext();
-                
-                // Animate button
-                gsap.to(nextBtn, {
-                    scale: 1.2,
-                    duration: 0.2,
-                    yoyo: true
-                });
+                gsap.to(nextBtn, { scale: 1.2, duration: 0.2, yoyo: true });
             });
             
             function playNext() {
@@ -2446,51 +2627,32 @@
                 }
             }
             
-            // Shuffle toggle
             shuffleBtn.addEventListener('click', function() {
                 isShuffled = !isShuffled;
                 shuffleBtn.classList.toggle('btn-warning', isShuffled);
                 shuffleBtn.classList.toggle('btn-outline-warning', !isShuffled);
-                
-                // Animate shuffle icon
-                gsap.to(shuffleBtn, {
-                    rotation: 360,
-                    duration: 0.5
-                });
+                gsap.to(shuffleBtn, { rotation: 360, duration: 0.5 });
             });
             
-            // Repeat toggle
             repeatBtn.addEventListener('click', function() {
                 const modes = ['off', 'one', 'all'];
                 const currentIndex = modes.indexOf(repeatMode);
                 repeatMode = modes[(currentIndex + 1) % modes.length];
-                
                 repeatBtn.classList.toggle('btn-warning', repeatMode !== 'off');
                 repeatBtn.classList.toggle('btn-outline-warning', repeatMode === 'off');
-                
-                // Change icon based on mode
                 if (repeatMode === 'one') {
                     repeatBtn.innerHTML = '<i class="fas fa-redo"></i><sup class="small">1</sup>';
                 } else {
                     repeatBtn.innerHTML = '<i class="fas fa-redo"></i>';
                 }
-                
-                // Animate repeat icon
-                gsap.to(repeatBtn, {
-                    rotation: 360,
-                    duration: 0.5
-                });
+                gsap.to(repeatBtn, { rotation: 360, duration: 0.5 });
             });
             
-            // Volume control
             volumeSlider.addEventListener('input', function() {
                 const volume = this.value;
                 localStorage.setItem('radioVolume', volume);
-                
-                // Update mute button state
                 muteBtn.classList.toggle('btn-warning', volume == 0);
                 muteBtn.classList.toggle('btn-outline-warning', volume != 0);
-                
                 if (volume == 0) {
                     muteBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
                 } else if (volume < 50) {
@@ -2500,10 +2662,8 @@
                 }
             });
             
-            // Mute toggle
             muteBtn.addEventListener('click', function() {
                 const currentVolume = volumeSlider.value;
-                
                 if (currentVolume > 0) {
                     localStorage.setItem('lastVolume', currentVolume);
                     volumeSlider.value = 0;
@@ -2513,33 +2673,24 @@
                 } else {
                     const lastVolume = localStorage.getItem('lastVolume') || 80;
                     volumeSlider.value = lastVolume;
-                    muteBtn.innerHTML = lastVolume < 50 ? 
-                        '<i class="fas fa-volume-down"></i>' : 
-                        '<i class="fas fa-volume-up"></i>';
+                    muteBtn.innerHTML = lastVolume < 50 ? '<i class="fas fa-volume-down"></i>' : '<i class="fas fa-volume-up"></i>';
                     muteBtn.classList.remove('btn-warning');
                     muteBtn.classList.add('btn-outline-warning');
                 }
-                
-                // Trigger input event to update storage
                 volumeSlider.dispatchEvent(new Event('input'));
             });
             
-            // Progress bar click to seek
             playerProgressBar.parentElement.addEventListener('click', function(e) {
                 const rect = this.getBoundingClientRect();
                 const percent = (e.clientX - rect.left) / rect.width;
-                
                 currentTime = Math.floor(percent * totalTime);
                 const progressPercent = (currentTime / totalTime) * 100;
                 playerProgressBar.style.width = `${progressPercent}%`;
                 playerElapsed.textContent = formatTime(currentTime);
-                
-                // Update hero progress
                 document.getElementById('nowPlayingProgress').style.width = `${progressPercent}%`;
                 document.getElementById('nowPlayingElapsed').textContent = formatTime(currentTime);
             });
             
-            // Initialize with first track
             updateTrackInfo();
         }
         
@@ -2600,10 +2751,8 @@
                 }
             ];
             
-            // Clear loading indicator
             container.innerHTML = '';
             
-            // Display videos
             mockVideos.forEach(video => {
                 const col = document.createElement('div');
                 col.className = 'col-lg-4 col-md-6 mb-4 youtube-video-card';
@@ -2632,7 +2781,6 @@
                 container.appendChild(col);
             });
             
-            // Add animation to cards
             gsap.from('.youtube-video-card', {
                 duration: 0.8,
                 y: 30,
@@ -2645,11 +2793,9 @@
         
         // Form Handlers
         function initForms() {
-            // Song request form
             const songRequestForm = document.getElementById('songRequestForm');
             if (songRequestForm) {
                 songRequestForm.addEventListener('submit', function(e) {
-                    // Form will submit to Formspree
                     setTimeout(() => {
                         alert('Thank you for your song request! We\'ll do our best to play it soon.');
                         this.reset();
@@ -2657,7 +2803,6 @@
                 });
             }
             
-            // Contact form
             const contactForm = document.getElementById('contactForm');
             if (contactForm) {
                 contactForm.addEventListener('submit', function(e) {
@@ -2668,7 +2813,6 @@
                 });
             }
             
-            // Newsletter form
             const newsletterForm = document.getElementById('newsletterForm');
             if (newsletterForm) {
                 newsletterForm.addEventListener('submit', function(e) {
@@ -2686,7 +2830,6 @@
             const pollResults = document.getElementById('pollResults');
             const resultsContainer = document.getElementById('resultsContainer');
             
-            // Load poll data from localStorage
             function loadPollData() {
                 const savedData = localStorage.getItem('ugonlinePoll');
                 if (savedData) {
@@ -2695,12 +2838,10 @@
                 }
             }
             
-            // Save poll data to localStorage
             function savePollData() {
                 localStorage.setItem('ugonlinePoll', JSON.stringify(pollData));
             }
             
-            // Update poll results display
             function updatePollResults() {
                 resultsContainer.innerHTML = '';
                 
@@ -2731,52 +2872,36 @@
                     resultsContainer.appendChild(resultDiv);
                 });
                 
-                // Add total votes
                 const totalDiv = document.createElement('div');
                 totalDiv.className = 'text-center mt-3';
                 totalDiv.innerHTML = `<strong>Total Votes: ${pollData.totalVotes}</strong>`;
                 resultsContainer.appendChild(totalDiv);
             }
             
-            // Submit poll
             submitPollBtn.addEventListener('click', function() {
                 const selectedOption = document.querySelector('input[name="contentPoll"]:checked');
                 
                 if (selectedOption) {
                     const value = selectedOption.value;
-                    
-                    // Check if user has already voted
                     const hasVoted = localStorage.getItem('ugonlineHasVoted');
                     if (hasVoted) {
                         alert('You have already voted in this poll. Thank you for your participation!');
                         return;
                     }
                     
-                    // Update poll data
                     pollData[value]++;
                     pollData.totalVotes++;
-                    
-                    // Save data
                     savePollData();
-                    
-                    // Mark user as voted
                     localStorage.setItem('ugonlineHasVoted', 'true');
-                    
-                    // Update results display
                     updatePollResults();
                     pollResults.style.display = 'block';
-                    
-                    // Scroll to results
                     pollResults.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                    
-                    // Show thank you message
                     alert('Thank you for voting! Your opinion helps us improve our content.');
                 } else {
                     alert('Please select an option before submitting your vote.');
                 }
             });
             
-            // Initialize poll
             loadPollData();
         }
         
@@ -2789,40 +2914,21 @@
             const aiMessage = document.getElementById('aiMessage');
             const aiQuestions = document.querySelectorAll('.ai-question');
             
-            // Open AI modal
             aiButton.addEventListener('click', function() {
                 aiModal.style.display = 'flex';
-                gsap.fromTo(aiModal,
-                    { opacity: 0 },
-                    { opacity: 1, duration: 0.3 }
-                );
+                gsap.fromTo(aiModal, { opacity: 0 }, { opacity: 1, duration: 0.3 });
             });
             
-            // Close AI modal
             closeAIModal.addEventListener('click', function() {
-                gsap.to(aiModal, {
-                    opacity: 0,
-                    duration: 0.3,
-                    onComplete: () => {
-                        aiModal.style.display = 'none';
-                    }
-                });
+                gsap.to(aiModal, { opacity: 0, duration: 0.3, onComplete: () => { aiModal.style.display = 'none'; } });
             });
             
-            // Close modal when clicking outside
             aiModal.addEventListener('click', function(e) {
                 if (e.target === aiModal) {
-                    gsap.to(aiModal, {
-                        opacity: 0,
-                        duration: 0.3,
-                        onComplete: () => {
-                            aiModal.style.display = 'none';
-                        }
-                    });
+                    gsap.to(aiModal, { opacity: 0, duration: 0.3, onComplete: () => { aiModal.style.display = 'none'; } });
                 }
             });
             
-            // Handle AI question buttons
             aiQuestions.forEach(btn => {
                 btn.addEventListener('click', function() {
                     const question = this.getAttribute('data-question');
@@ -2831,12 +2937,9 @@
                 });
             });
             
-            // Send AI message
             sendAIMessage.addEventListener('click', function() {
                 const message = aiMessage.value.trim();
-                
                 if (message) {
-                    // Simulate API call
                     const originalText = sendAIMessage.innerHTML;
                     sendAIMessage.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Sending...';
                     sendAIMessage.disabled = true;
@@ -2844,24 +2947,15 @@
                     setTimeout(() => {
                         sendAIMessage.innerHTML = originalText;
                         sendAIMessage.disabled = false;
-                        
                         alert('Your question has been sent to our team! We\'ll respond as soon as possible.');
                         aiMessage.value = '';
-                        
-                        gsap.to(aiModal, {
-                            opacity: 0,
-                            duration: 0.3,
-                            onComplete: () => {
-                                aiModal.style.display = 'none';
-                            }
-                        });
+                        gsap.to(aiModal, { opacity: 0, duration: 0.3, onComplete: () => { aiModal.style.display = 'none'; } });
                     }, 1500);
                 } else {
                     alert('Please type a question before sending.');
                 }
             });
             
-            // Allow Enter key to send message
             aiMessage.addEventListener('keypress', function(e) {
                 if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();
@@ -2872,12 +2966,7 @@
         
         // Scroll Animations
         function initScrollAnimations() {
-            // Animate elements on scroll
-            const observerOptions = {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            };
-            
+            const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -2887,24 +2976,14 @@
                 });
             }, observerOptions);
             
-            // Observe elements with data-animate attribute
-            document.querySelectorAll('[data-animate]').forEach(el => {
-                observer.observe(el);
-            });
+            document.querySelectorAll('[data-animate]').forEach(el => observer.observe(el));
             
-            // Parallax effect for hero section
             window.addEventListener('scroll', function() {
                 const scrolled = window.pageYOffset;
                 const rate = scrolled * -0.5;
-                
                 const animatedBg = document.querySelector('.animated-bg');
-                if (animatedBg) {
-                    animatedBg.style.transform = `translate3d(0, ${rate}px, 0)`;
-                }
-            });
-            
-            // Navbar background on scroll
-            window.addEventListener('scroll', function() {
+                if (animatedBg) animatedBg.style.transform = `translate3d(0, ${rate}px, 0)`;
+                
                 const navbar = document.querySelector('.navbar');
                 if (window.scrollY > 100) {
                     navbar.style.background = 'rgba(18, 18, 18, 0.98) !important';
@@ -2923,18 +3002,13 @@
             const interval = setInterval(() => {
                 count++;
                 counterElement.textContent = count;
-                
-                if (count >= target) {
-                    clearInterval(interval);
-                }
+                if (count >= target) clearInterval(interval);
             }, 50);
             
-            // Simulate live listener updates
             setInterval(() => {
                 const currentCount = parseInt(counterElement.textContent);
                 const change = Math.floor(Math.random() * 5) - 2;
                 const newCount = Math.max(15, Math.min(35, currentCount + change));
-                
                 counterElement.textContent = newCount;
                 document.getElementById('liveListenerCount').textContent = newCount;
             }, 30000);
@@ -2953,7 +3027,6 @@
         const videoPlayer = document.getElementById('videoPlayer');
         const closeVideo = document.getElementById('closeVideo');
 
-        // Add click listeners to video thumbnails (for both containers)
         document.addEventListener('click', function(e) {
             const target = e.target.closest('.video-thumbnail');
             if (target) {
@@ -2979,8 +3052,8 @@
 
         // New sticky player with OpenDrive audio source
         let audio = new Audio(NEW_CONFIG.AUDIO_SRC);
-        let isPlaying = false;
-        let audioDuration = 225; // placeholder, will be set when metadata loaded
+        let isPlaying2 = false;
+        let audioDuration = 225;
 
         audio.addEventListener('loadedmetadata', () => {
             audioDuration = audio.duration;
@@ -2993,7 +3066,6 @@
             return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
         }
 
-        // New player controls
         const playBtn2 = document.getElementById('playerPlayBtn2');
         const pauseBtn2 = document.getElementById('playerPauseBtn2');
         const progressBar2 = document.getElementById('playerProgressBar2');
@@ -3006,14 +3078,14 @@
             audio.play();
             playBtn2.style.display = 'none';
             pauseBtn2.style.display = 'inline-flex';
-            isPlaying = true;
+            isPlaying2 = true;
         });
 
         pauseBtn2.addEventListener('click', () => {
             audio.pause();
             pauseBtn2.style.display = 'none';
             playBtn2.style.display = 'inline-flex';
-            isPlaying = false;
+            isPlaying2 = false;
         });
 
         audio.addEventListener('timeupdate', () => {
@@ -3066,8 +3138,7 @@
         // Also load videos into the second container
         setTimeout(() => {
             const container2 = document.getElementById('youtubeVideosContainer2');
-            if (container2 && typeof loadYouTubeVideos === 'function') {
-                // Reuse the original function but target the second container
+            if (container2) {
                 const mockVideos = [
                     {
                         id: 'video1',
